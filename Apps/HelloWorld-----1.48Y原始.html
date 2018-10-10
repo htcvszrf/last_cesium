@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Use correct character set. -->
+  <meta charset="utf-8">
+  <!-- Tell IE to use the latest, best version. -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <title>Hello World!</title>
+  <script src="../Build/Cesium/Cesium.js"></script>
+  <style>
+      @import url(../Build/Cesium/Widgets/widgets.css);
+      html, body, #cesiumContainer {
+          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+      }
+  </style>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <script>
+    var viewer = new Cesium.Viewer('cesiumContainer',{
+	baseLayerPicker:true});
+	/** 
+	//成功加载world1服务wms
+	layer = new Cesium.WebMapServiceImageryProvider({
+ 	 url: "http://localhost:8080/geoserver/CESIUM_TEST/wms?",
+ 	 layers: 'CESIUM_TEST:world1',
+     crs : 'EPSG:4326',
+	  style :'default',
+ 	 parameters: {
+ 		 service : 'WMS',
+ 		 format: 'image/png',
+ 		 transparent: true
+ 	 }
+  });
+  viewer.imageryLayers.addImageryProvider(layer);**/
+ 
+  //加载geoserver的gwc的wms服务 BYQ 成功
+  layer = new Cesium.WebMapServiceImageryProvider({
+ 	 url: "http://localhost:8080/geoserver/gwc/service/wms?SERVICE=WMS&amp;",
+ 	 layers: 'xichanganjie:BYQ',
+     crs : 'EPSG:4326',
+	  style :'default',
+ 	 parameters: {
+ 		 service : 'WMS',
+ 		 format: 'image/png',
+ 		 transparent: true
+ 	 }
+  });
+  viewer.imageryLayers.addImageryProvider(layer);
+  
+  /**测试阶段
+  layer = new Cesium.WebMapServiceImageryProvider({
+ 	 url: "http://localhost:8080/geoserver/gwc/service/wmts?service=WMTS&version=1.1.1&request=GetTile&styles=&format=image/png&layer=xichanganjie:BYQ&width=256&height=256&srs=EPSG%3A4326&TILEMATRIXSET=EPSG:4326&TILEMATRIX=EPSG:4326:{TILEMATRIX}&tilerow={x}&tilecol={y}&",
+ 	 layers: 'xichanganjie:BYQ',
+     crs : 'EPSG:4326',
+	  style :'default',	  
+	  format: 'image/png',
+	  TILEMATRIXSETID:'EPSG:4326',
+ 	transparent: true,
+	TILEMATRIX : [0,1,2,3,4,5,6,7,8,9,10],
+	
+	});
+	 viewer.imageryLayers.addImageryProvider(layer);
+	 **/
+	/**
+	TILEMATRIX : ['EPSG:4326:0', 'EPSG:4326:1', 'EPSG:4326:2', 'EPSG:4326:3', 'EPSG:4326:4', 'EPSG:4326:5',
+		'EPSG:4326:6', 'EPSG:4326:7', 'EPSG:4326:8', 'EPSG:4326:9', 'EPSG:4326:10', 'EPSG:4326:11', 'EPSG:4326:12',
+		'EPSG:4326:13', 'EPSG:4326:14', 'EPSG:4326:15', '4326:16', 'EPSG:4326:17', 'EPSG:4326:18', 'EPSG:4326:19'],**/
+  
+ 
+  
+  
+  /**
+  //成功加载BYQ wms 但是加载慢
+  layer = new Cesium.WebMapServiceImageryProvider({
+ 	 url: "http://localhost:8080/geoserver/xichanganjie/wms?",
+ 	 layers: 'xichanganjie:BYQ',
+     crs : 'EPSG:4326',
+	  style :'default',
+ 	 parameters: {
+ 		 service : 'WMS',
+ 		 format: 'image/png',
+ 		 transparent: true
+ 	 }
+  });
+  viewer.imageryLayers.addImageryProvider(layer);
+  **/
+  
+  /**
+  //成功加载geoserver的wms服务 东营的shape
+  layer = new Cesium.WebMapServiceImageryProvider({
+ 	 url: "http://localhost:8080/geoserver/CESIUM_TEST/wms?",
+ 	 layers: 'CESIUM_TEST:daolu_Project',
+     crs : 'EPSG:4326',
+	  style :'default',
+ 	 parameters: {
+ 		 service : 'WMS',
+ 		 format: 'image/png',
+ 		 transparent: true
+ 	 }
+  });
+  viewer.imageryLayers.addImageryProvider(layer);
+  **/
+  /**
+  //成功加载geoserver的wms服务 西长安街d_building  但是位置不对
+  layer = new Cesium.WebMapServiceImageryProvider({
+ 	 url: "http://localhost:8080/geoserver/CESIUM_TEST/wms?",
+ 	 layers: 'CESIUM_TEST:daolu_Project',
+     crs : 'EPSG:3785',
+	  style :'default',
+ 	 parameters: {
+ 		 service : 'WMS',
+ 		 format: 'image/png',
+ 		 transparent: true
+ 	 }
+  });
+  viewer.imageryLayers.addImageryProvider(layer);
+  **/
+  
+  
+  
+  //gwc
+  /**
+  var shadedRelief1 = new Cesium.WebMapTileServiceImageryProvider({
+	url : 'http://192.168.0.80:8060/geowebcache/service/wmts?',
+	layer : 'XCAJ_25D',
+	style : 'default',
+	format : 'image/png',
+	tileMatrixSetID : 'EPSG:3857_XCAJ_25D',
+	tileMatrixLabels : ['EPSG:3857_XCAJ_25D:0', 'EPSG:3857_XCAJ_25D:1', 'EPSG:3857_XCAJ_25D:2', 'EPSG:3857_XCAJ_25D:3', 'EPSG:3857_XCAJ_25D:4', 'EPSG:3857_XCAJ_25D:5',
+		'EPSG:3857_XCAJ_25D:6', 'EPSG:3857_XCAJ_25D:7', 'EPSG:3857_XCAJ_25D:8', 'EPSG:3857_XCAJ_25D:9', 'EPSG:3857_XCAJ_25D:10', 'EPSG:3857_XCAJ_25D:11', 'EPSG:3857_XCAJ_25D:12',
+		'EPSG:3857_XCAJ_25D:13', 'EPSG:3857_XCAJ_25D:14', 'EPSG:3857_XCAJ_25D:15', 'EPSG:3857_XCAJ_25D:16', 'EPSG:3857_XCAJ_25D:17', 'EPSG:3857_XCAJ_25D:18', 'EPSG:3857_XCAJ_25D:19'],
+	maximumLevel: 19
+	});
+viewer.imageryLayers.addImageryProvider(shadedRelief1);
+**/
+  </script>
+</body>
+</html>

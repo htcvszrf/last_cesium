@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Use correct character set. -->
+  <meta charset="utf-8">
+  <!-- Tell IE to use the latest, best version. -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <title>Hello World!</title>
+	<!--
+	<script src="../Build/Cesium/Cesium.js"></script>
+	-->
+
+	<script type="text/javascript" src="../Build/CesiumUnminified/Cesium.js"></script>
+	<script src="Sandcastle/Sandcastle-header.js"></script>
+  <script src="echarts.min.js"></script>
+  
+  <style>
+      @import url(../Build/Cesium/Widgets/widgets.css);
+      html, body, #cesiumContainer {
+          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+      }
+	  .container {
+		position: absolute;
+		top: 30px;
+		left: 50px;
+		width: 400px;
+		height: 250px;
+		z-index: 999;
+		background-color: rgba(255,255,255,.8);
+	  }
+	  .home {
+		background: url('zhuye.png');
+		}
+	  .home:hover{
+		  background: url('zhuye.png');
+	  }
+	.clear {
+	background: url('qingchu.png');
+	}
+	.clear:hover {
+		background: url('qingchu.png');
+	}
+	.draw-btn{
+	background: url('pencel.png');
+	  }
+	  .draw-btn:hover {
+		background: url('pencel.png');
+	}
+	#demo1 {
+	position: absolute;
+	width: 111px;
+	height: 15px;
+	border-color: #fff;
+	z-index: 999;
+	right: 44px;
+	top: 50px;
+	}
+	#demo2 {
+	position: absolute;
+	width: 111px;
+	height: 15px;
+	border-color: #fff;
+	z-index: 999;
+	right: 44px;
+	top: 75px;
+	}
+	#demo3 {
+	position: absolute;
+	width: 111px;
+	height: 15px;
+	border-color: #fff;
+	z-index: 999;
+	right: 44px;
+	top: 100px;
+	}
+	#btna {
+	position: absolute;
+	width: 30px;
+	display:block;
+	height: 21px;
+	background-color: #fff;
+	z-index: 999;
+	right: 13px;
+	top: 50px;
+	}
+	#btnb {
+	position: absolute;
+	width: 30px;
+	height: 21px;
+	display:block;
+	background-color: #fff;
+	z-index: 999;
+	right: 13px;
+	top: 75px;
+	}
+
+	#btnc {
+	position: absolute;
+	width: 30px;
+	display:block;
+	height: 21px;
+	background-color: #fff;
+	z-index: 999;
+	right: 13px;
+	top: 100px;
+	}
+	.btns {
+		top: 7px;
+		width: 161px;
+		height: 31px;
+		/* float: right; */
+		position: absolute;
+		right: 4px;
+		/* background: #fff; */
+		z-index: 99;		
+		display: block;
+	}
+	.little-btn {
+		cursor: pointer;
+		height: 30px;
+		width: 30px;
+		z-index: 1000;
+		/* position: absolute; */
+		/* right: 48px; */
+		/* top: 8px; */
+		display: block;
+		/* border-width: 1px; */
+		border-color: #fff;
+		margin: 0 5px;
+		float: left;
+	}
+	.little-btn:hover{
+		color: #fff;
+		fill: #fff;
+		border-color: #aef;
+		box-shadow: 0 0 8px #318dd2;
+	}
+	.model-building {
+		background: url('moxing.png')
+	}
+
+  #toolbar{
+	  position: absolute;
+	  z-index: 99;
+	  right: 3px;
+	  top: 50px;
+	  padding: 2px 3px;
+  }
+  .box-draw-a {
+    position: absolute;
+    border-width: 1px;
+    border-color: white;
+    height: 129px;
+    width: 30px;
+    display: none;
+    right: 10px;
+    top: 33px;
+    z-index: 1000;
+    margin: 3px 0;
+    background-color: #908c8c;
+  }
+  .box-draw:hover {
+  color: #fff;
+    fill: #fff;
+    border-color: #aef;
+    box-shadow: 0 0 8px #318dd2;
+  }
+  .box-draw {
+  cursor: pointer;
+  height: 30px;
+    width: 30px;
+    margin: 10px 0;
+    
+  }
+  
+  </style>
+</head>
+<body>
+  <div id="cesiumContainer">
+  
+	  <div id="toolbar"></div>
+	  <div class="btns">
+		  <div class="home little-btn" onclick="home()" ></div>
+		  <div class="clear little-btn" onclick="model_clear()" ></div>
+		  <div class="model-building little-btn" onclick="showModel()"></div>
+		  <div class="draw-btn little-btn" id='draw-btn' onclick="showDrawBox()"></div>
+		  
+	  </div>
+	  <div class="box-draw-a" id='draw-btn-a' onclick="" >
+		  	<div class="box-draw box-point" onclick='drawPoint()' style="background: url('point.png')"></div>
+		  	<div class="box-draw box-polyline" onclick='drawPlyline()' style="background: url('polyline.png')"></div>
+		  	<div class="box-draw box-polygon"  onclick='drawPolygon()'style="background: url('polygon.png')"></div>
+		  	
+		  </div>
+
+
+	  <!--
+	  <input type="text" class = "input" id="demo1">
+	  <input type="text" class = "input" id="demo2">
+	  <input type="text" class = "input" id="demo3">
+	  <div id = "btna" onclick="a1()" >n_a</div>
+	  <div id = "btnb" onclick="b1()" >n_b</div>
+	  -->
+	   <!--&lt;!&ndash;测试按钮&ndash;&gt;
+	  <div id = "btnc" onclick="go()">btn</div>
+-->
+  
+  
+
+  
+  <div class="container">
+  
+  </div><!--terrainProvider : Cesium.createWorldTerrain(),这个属性是可以在cesium中加载地形图-->
+  <script>
+
+	  
+  </script>
+</body>
+<script src="interact.js"></script>
+<script type="text/javascript" src="../../../../library/jquery/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="../../../view3/interact.js"></script>
+<script type="text/javascript" src="../../VitoGISFramework.js"></script>
+<script type="text/javascript" src="bigdata.js"></script>
+</html>
+
