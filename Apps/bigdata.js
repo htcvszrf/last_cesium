@@ -5,7 +5,7 @@ var myobj = {
 		  baseLayerPicker:false,
 		  navigationHelpButton:false,
 		  automaticallyTrackDataSourceClocks:true,
-		  animation:false,
+		  animation:true,
 		  timeline:false,
 		  vrButton:false,
 		  infoBox : true,//弹出面板
@@ -314,31 +314,97 @@ var stripeMaterial = new Cesium.StripeMaterialProperty({
     repeat : 5.0
 });
 
-//var BJ = viewer.entities.add({
-//	id: 'nake',
-//	name : 'beijing',
-//  position : Cesium.Cartesian3.fromDegrees(116.3765432498,39.9087525639),
-//  point : {
-//    pixelSize : 5,
-//    color : Cesium.Color.RED,
-//    outlineColor : Cesium.Color.WHITE,
-//    outlineWidth : 2
-//  },
-//  label : {
-//    text : '北京',
-//    font : '14pt monospace',
-//    style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-//    outlineWidth : 2,
-//    //垂直位置
-//    verticalOrigin : Cesium.VerticalOrigin.BUTTON,
-//    //中心位置
-//    pixelOffset : new Cesium.Cartesian2(0, 20)
-//  }
+/*var BJ = viewer.entities.add({
+	id: 'nake',
+	name : 'beijing',
+  position : Cesium.Cartesian3.fromDegrees(116.3765432498,39.9087525639),
+  point : {
+    pixelSize : 5,
+    color : Cesium.Color.RED,
+    outlineColor : Cesium.Color.WHITE,
+    outlineWidth : 2
+  },
+  label : {
+    text : '北京',
+    font : '14pt monospace',
+    style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+    outlineWidth : 2,
+    //垂直位置
+    verticalOrigin : Cesium.VerticalOrigin.BUTTON,
+    //中心位置
+    pixelOffset : new Cesium.Cartesian2(0, 20)
+  }
+});*/
+//classificationType: Cesium.ClassificationType.CESIUM_3D_TILE
+var longitude3 = 116.07373566585602;
+var latitude3 = 39.90653472534493;
+var height3 = 0;
+
+var heading3 = 0;
+var tileset3= new Cesium.Cesium3DTileset({
+	url: '14/tileset.json'
+
+});
+tileset3.style = new Cesium.Cesium3DTileStyle({
+	color: 'rgba(255, 0, 0, 0.5)'
+
+});
+viewer.scene.primitives.add(tileset3);
+tileset3.readyPromise.then(function(argument) {
+	var position = Cesium.Cartesian3.fromDegrees(longitude3, latitude3, height3);
+	var mat = Cesium.Transforms.eastNorthUpToFixedFrame(position);
+	var rotationX = Cesium.Matrix4.fromRotationTranslation(Cesium.Matrix3.fromRotationZ(Cesium.Math.toRadians(heading3)));
+	Cesium.Matrix4.multiply(mat, rotationX, mat);
+	tileset3._root.transform = mat;
+	//viewer.camera.flyTo({destination: Cesium.Cartesian3.fromDegrees(longitude, latitude, height + 1000)});
+});
+
+
+//var longitude1 = 116.37373566585602;
+//var latitude1 = 39.90653472534493;
+//var height1 = 23;
+//var heading1 = 0;
+//var tileset1 = new Cesium.Cesium3DTileset({
+//	url: 'http://localhost:9002/api/folder/e18cf10462ac4dec88d2760214f532af/tileset.json'
+//});
+//
+//tileset1.style = new Cesium.Cesium3DTileStyle({
+//	color: 'rgba(255, 0, 0, 0.5)'
+//
+//});
+//viewer.scene.primitives.add(tileset1);
+//tileset1.readyPromise.then(function(argument) {
+//	var position = Cesium.Cartesian3.fromDegrees(longitude1, latitude1, height1);
+//	var mat = Cesium.Transforms.eastNorthUpToFixedFrame(position);
+//	var rotationX = Cesium.Matrix4.fromRotationTranslation(Cesium.Matrix3.fromRotationZ(Cesium.Math.toRadians(heading1)));
+//	Cesium.Matrix4.multiply(mat, rotationX, mat);
+//	tileset1._root.transform = mat;
+//	//viewer.camera.flyTo({destination: Cesium.Cartesian3.fromDegrees(longitude1, latitude1, height1 + 1000)});
 //});
 
+//
+//var longitude11 = 116.37373566585602;
+//var latitude11 = 39.90653472534493;
+//var height11 = 20;
+//var heading11 = 0;
+//var tileset11 = new Cesium.Cesium3DTileset({
+//	url: 'http://localhost:9002/api/folder/489b6b40ebad475e831594c34fd553de/tileset.json'
+//});
+//
+//viewer.scene.primitives.add(tileset11);
+//tileset11.readyPromise.then(function(argument) {
+//	var position = Cesium.Cartesian3.fromDegrees(longitude11, latitude11, height11);
+//	var mat = Cesium.Transforms.eastNorthUpToFixedFrame(position);
+//	var rotationX = Cesium.Matrix4.fromRotationTranslation(Cesium.Matrix3.fromRotationZ(Cesium.Math.toRadians(heading11)));
+//	Cesium.Matrix4.multiply(mat, rotationX, mat);
+//	tileset11._root.transform = mat;
+//	//viewer.camera.flyTo({destination: Cesium.Cartesian3.fromDegrees(longitude1, latitude1, height1 + 1000)});
+//});
+//xcaj3dtile
 var longitude = 116.3681248960;
 var latitude = 39.9061131244;
 var height = 40.896615260699996;
+
 var heading = 0;
 var tileset = new Cesium.Cesium3DTileset({
 	show:true,
@@ -420,7 +486,8 @@ var highlighted = {
 var selectedEntity = new Cesium.Entity();
 
 var drawstatus = 0;
-var clickHandler = viewer.screenSpaceEventHandler.getInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
+//var clickHandler = viewer.screenSpaceEventHandler.getInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
+/*最初的点击事件
 viewer.screenSpaceEventHandler.setInputAction(function onLeftClick(movement) {
     // If a feature was previously selected, undo the highlight
 	if (drawstatus == 0){
@@ -451,9 +518,10 @@ viewer.screenSpaceEventHandler.setInputAction(function onLeftClick(movement) {
 	    } else {
 	        Cesium.Color.clone(pickedFeature.color, selected.originalColor);
 	    }
-
+       //alert('lalalall')
 	    // Highlight newly selected feature
 	    pickedFeature.color = Cesium.Color.LIME;
+	   //function clickonme(){}
 		
 		// Set feature infobox description
 	    var featureName = pickedFeature.getProperty('name');
@@ -474,6 +542,7 @@ viewer.screenSpaceEventHandler.setInputAction(function onLeftClick(movement) {
     
     
 }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+*/
 function random(m, n) {
 		var diff = n - m;
 		var num = m + Math.floor(diff*Math.random())
@@ -538,6 +607,8 @@ function showDrawBox(){
 }
 
 function drawPoint(){
+	//$('#draw-btn-a').css('display','none');
+	
 	drawstatus = 1;
 	/*scene.globe.depthTestAgainstTerrain = true;
 	handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
@@ -602,6 +673,22 @@ function drawPoint(){
 				heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
 			}
 		});
+		/*var billboards = viewer.entities.add({
+			position : Cesium.Cartesian3.fromDegrees(longitudeString,latitudeString, 0.5),
+			billboard : new Cesium.BillboardGraphics({
+				show : true ,
+				image : 'Sandcastle/images/point.png',
+				//pixelOffset: new Cesium.Cartesian2(0, 0),
+				//eyeOffset: new Cesium.Cartesian3(0.0, 0.0, 0.0),
+				horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+				verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+				scale: 1.0
+
+			})
+		});*/
+		
+		//handler.destroy();
+		//$('#cesium-infoBox').css('display','block');
 	}, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 	
 	
@@ -619,7 +706,7 @@ function drawPoint(){
 		positions.pop();//最后一个点无效
 		//viewer.entities.remove(floatingPoint);  这句不注释的话 右击线上的最后一哥点就看不到
        // tooltip.style.display = "none";
-      
+		handler.destroy();
     }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
 }
 
@@ -739,7 +826,7 @@ function drawPoint(){
 			positions.pop();//最后一个点无效
 			//viewer.entities.remove(floatingPoint);  这句不注释的话 右击线上的最后一哥点就看不到
 	       // tooltip.style.display = "none";
-	      
+			entity.label.show = false;
 	    }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
 	 
 	    var PolyLinePrimitive = (function () {
@@ -925,6 +1012,7 @@ function drawPoint(){
 	  				pixelOffset : new Cesium.Cartesian2(0, -10)
 	  			}
 	  		});
+	  		entity.label.show = false;
 	  		
 	      }, Cesium.ScreenSpaceEventType.RIGHT_CLICK );	
 	   
@@ -1029,7 +1117,7 @@ function drawPoint(){
 //window.clearInterval(t1);
 //初始界面
 (function() {
-	viewer.camera.flyTo({	
+	/*viewer.camera.flyTo({	
 		//destination :  Cesium.Cartesian3.fromDegrees(116.383,39.903, 8000),  116.3833502774,39.9033814225    
 		destination :  Cesium.Cartesian3.fromDegrees(116.38994911475129,39.89509257618663,2079),//初始化地图  109.5105236675,40.6619303652,22294721 //模型位置对应的中心点116.39430992605826,39.89520870191362,2079      //116.38505582077272lat:39.90437803870873屏幕中心点      (116.42485470892576,39.87143379776744,5000)  (116.44963152553781,39.85231682653562,8000)
 		orientation: {
@@ -1038,7 +1126,39 @@ function drawPoint(){
             roll : 0//
         },
 		duration : 3
+	});*/
+	var dy_shp =Cesium.Cartesian3.fromDegrees(109.5105236675,40.6619303652,22294721);
+	viewer.camera.flyTo({
+		destination :  dy_shp,
+		orientation: {
+			heading : Cesium.Math.toRadians(0), // default value is 0.0 (north)
+			pitch : Cesium.Math.toRadians(-90),// default value (looking down)
+			roll : 0//
+		},
+		duration : 5
 	});
+	var one_map = viewer.imageryLayers.addImageryProvider(new Cesium.SingleTileImageryProvider({
+		url : 'world.jpg',
+		rectangle : Cesium.Rectangle.fromDegrees(-180.0, -90.0, 180.0, 90.0)
+	}));
+	
+	layer = new Cesium.WebMapServiceImageryProvider({
+		url: "http://192.168.0.80:8080/geoserver/CESIUM_TEST/wms?",
+		layers: 'CESIUM_TEST:shengjie',
+		crs : 'EPSG:4326',
+		style :'default',
+		parameters: {
+			service : 'WMS',
+			format: 'image/png',
+			transparent: true
+		}
+
+		//CESIUM_TEST:daolu_Project
+	});
+	viewer.imageryLayers.addImageryProvider(layer);
+	
+	
+	
 //初始化加载全国shp
 //	layer = new Cesium.WebMapServiceImageryProvider({
 //		url: "http://localhost:8080/geoserver/CESIUM_TEST/wms?",
@@ -1370,7 +1490,10 @@ var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
 //设置鼠标移动事件的处理函数，这里负责监听x,y坐标值变化
 handler.setInputAction(function(movement) {
     //通过指定的椭球或者地图对应的坐标系，将鼠标的二维坐标转换为对应椭球体三维坐标
-    cartesian = viewer.camera.pickEllipsoid(movement.endPosition, ellipsoid);
+	
+	
+    cartesian = viewer.camera.pickEllipsoid(movement.position, ellipsoid);
+
     if (cartesian) {
         //将笛卡尔坐标转换为地理坐标
         var cartographic = ellipsoid.cartesianToCartographic(cartesian);
@@ -1390,7 +1513,16 @@ handler.setInputAction(function(movement) {
 	//div 获取坐标值
 	//document.getElementById("lonlat").innerHTML="经度:"+"  "+longitudeString.toFixed(3)+"&nbsp&nbsp"+"  纬度:  "+latitudeString.toFixed(3)+"&nbsp&nbsp"+"   高度: "+height+"m";
 	//longitudeString = longitudeString.substring(0,longitudeString.indexOf(".")+1);
-}, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+    
+    //打印坐标值
+    console.log(longitudeString.toFixed(10) +',' +latitudeString.toFixed(10) + ","+ height)//左击事件
+	console.log(cartesian.x+','+cartesian.y+','+cartesian.z);
+	viewer.scene.pickPosition(event.position)
+},Cesium.ScreenSpaceEventType.LEFT_CLICK );//鼠标滑动获取坐标值  Cesium.ScreenSpaceEventType.MOUSE_MOVE
+
+//左击获取坐标值
+
+
 //设置鼠标滚动事件的处理函数，这里负责监听高度值变化
 // handler.setInputAction(function(wheelment) {
     // height = Math.ceil(viewer.camera.positionCartographic.height);
@@ -1403,10 +1535,13 @@ handler.setInputAction(function(movement) {
     
 	// alert("平移啦")
 // }, Cesium.CameraEventType.LEFT_DRAG);
-handler.setInputAction(function(wheelment) {            
+
+//左击获取坐标
+/*handler.setInputAction(function(wheelment) {            
 	console.log(longitudeString.toFixed(10) +',' +latitudeString.toFixed(10) + ","+ height)//左击事件
+	console.log(cartesian.x+','+cartesian.y+','+cartesian.z);
 	viewer.scene.pickPosition(event.position)
-}, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+}, Cesium.ScreenSpaceEventType.LEFT_CLICK);*/
 
 var gy_wms =Cesium.Cartesian3.fromDegrees(106.6371905002,26.6854640131,30000);
 var dy_shp =Cesium.Cartesian3.fromDegrees(109.5105236675,40.6619303652,22294721);
@@ -1425,8 +1560,28 @@ function changeMap(drawingMode){
 				transparent: true
 			}
 		});
+		
+		/*var one_map = viewer.imageryLayers.addImageryProvider(new Cesium.SingleTileImageryProvider({
+			url : 'BYQ.tif',
+			rectangle : Cesium.Rectangle.fromDegrees(106.589564439876, 26.658124786356545, 106.68509248494313, 26.711669168305)
+		}));*/
+		
+		
+
+		//viewer.imageryLayers.addImageryProvider(shadedRelief2);
+		//layer1 = new Cesium.WebMapServiceImageryProvider({
+		//	url: 'http://192.168.0.80:8080/geoserver/gwc/service/wms?SERVICE=WMS&amp',
+		//	layers: 'guiyang:D_BUILDING',
+		//	crs : 'EPSG:4326',
+		//	style :'default',
+		//	parameters: {
+		//		service : 'WMS',
+		//		format: 'image/png',
+		//		transparent: true
+		//	}
+		//});
 		layer1 = new Cesium.WebMapServiceImageryProvider({
-			url: 'http://192.168.0.80:8080/geoserver/gwc/service/wms?SERVICE=WMS&amp',
+			url: 'http://localhost:8090/geoserver/gwc/service/wms?SERVICE=WMS&amp',
 			layers: 'guiyang:D_BUILDING',
 			crs : 'EPSG:4326',
 			style :'default',
@@ -1436,7 +1591,7 @@ function changeMap(drawingMode){
 				transparent: true
 			}
 		});
-		layer.alpha = 0.1;
+		//layer.alpha = 0.1;
 		viewer.imageryLayers.addImageryProvider(layer);
 		viewer.imageryLayers.addImageryProvider(layer1);
 		viewer.camera.flyTo({
@@ -1478,6 +1633,9 @@ function changeMap(drawingMode){
 
 			//CESIUM_TEST:daolu_Project
 		});
+		
+		
+		
 		viewer.imageryLayers.addImageryProvider(layer);
 	}else if(drawingMode === 'Single_IMG_WMS'){
 		var one_map = viewer.imageryLayers.addImageryProvider(new Cesium.SingleTileImageryProvider({
@@ -1518,6 +1676,9 @@ function changeMap(drawingMode){
 		viewer.imageryLayers.addImageryProvider(ArcGIS);
 
 
+
+
+
 	}else if(drawingMode === 'tdtWMTS'){
 		var TDTWMTS =new Cesium.WebMapTileServiceImageryProvider({
 		     // 加载天地图WMTS 成功
@@ -1530,6 +1691,9 @@ function changeMap(drawingMode){
 			  subdomains:['t0','t1','t2','t3','t4','t5','t6','t7']
 		  })
 		viewer.imageryLayers.addImageryProvider(TDTWMTS);
+
+
+
 	}
 }
 
@@ -1578,6 +1742,12 @@ var options = [
 		}
 	},
 	{
+		text : '透明地图',
+		onselect : function() {
+			transpatenBuilding();
+		}
+	},
+	{
 		text : '删除所有图层',
 		onselect : function() {
 			drawingMode = 'Delete allLayer';
@@ -1603,6 +1773,9 @@ function createPoint(worldPosition) {
 	});
 	return point;
 }*/
+
+
+
 var options1 = [{
 	text : 'Draw Geometric'
 }, {
@@ -1612,6 +1785,66 @@ var options1 = [{
 		//drawShape(activeShapePoints)//测试代码
 		drawingMode = 'Point';
 		drawstatus =1;
+		
+		var url=__ctx + "/Comp/Stereoscopic_Point/getByType.ht";
+        //绘制后台点数据
+		$.ajax({
+            url: url,
+            type: "post",
+            dataType: "json",
+            success: function(data){
+                debugger;
+                for(var i=0;i<data.length;i++){
+                	/*var point = viewer.entities.add({
+                		position : Cesium.Cartesian3.fromDegrees(Number(data[i].x),Number(data[i].y),10), //  worldPosition, Cesium.Cartesian3.fromDegrees(longitudeString,latitudeString, 10), 
+                		point : {
+                			color : Cesium.Color.RED,
+                			pixelSize : 5,
+                			outlineColor : Cesium.Color.WHITE,
+                			outlineWidth : 2,
+                			heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+                		},
+                		label : {
+                		    text : 'LALAL',
+                		    font : '14pt monospace',
+                		    style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                		    outlineWidth : 2,
+                		    //垂直位置
+                		    verticalOrigin : Cesium.VerticalOrigin.BUTTON,
+                		    //中心位置
+                		    pixelOffset : new Cesium.Cartesian2(0, 20)
+                		  }
+                	});*/
+                	
+                	
+                	  
+                	var billboards = viewer.entities.add({
+            			position : Cesium.Cartesian3.fromDegrees(Number(data[i].x),Number(data[i].y)),
+            			billboard : new Cesium.BillboardGraphics({
+            				show : true ,
+            				image : 'Sandcastle/images/point.png',
+            				//pixelOffset: new Cesium.Cartesian2(0, 0),
+            				//eyeOffset: new Cesium.Cartesian3(0.0, 0.0, 0.0),
+            				horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+            				verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+            				scale: 1.0
+
+            			})
+            		});
+                	//handler.destroy();
+                }
+                
+                
+                 
+            },
+            error: function(msg){
+                alert("未查询到数据");
+            }
+        });
+		
+		
+        
+        
 
 	}
 },{
@@ -1655,7 +1888,10 @@ function createPoint(worldPosition) {
 
 			})
 		});
-
+		
+		
+		$('#cesium-infoBox').css('display','block');
+		handler.destroy();
 	}else {
 		
 		/*var cartographic = Cesium.Cartographic.fromCartesian(worldPosition);
@@ -1829,6 +2065,7 @@ new_element.setAttribute("type","text/javascript");
 new_element.setAttribute("src","wgs84(gps)Togcj02.js");// 在这里引入了wgs84(gps)Togcj02.js
 document.body.appendChild(new_element);
 
+
 //new_element=document.createElement("script");
 //new_element.setAttribute("type","text/javascript");
 //new_element.setAttribute("src","VitoGISFramework.js");// 在这里引入了wgs84(gps)Togcj02.js
@@ -1860,10 +2097,10 @@ viewer.scene.camera.moveEnd.addEventListener(function(){
 		});
 		if(height<250 && height>200 && cameraCurrentHeight ==0 ){
 			cameraCurrentHeight =1;
-			alert("现在相机高度小于250M,如果继续放大,默认地图将不做缩放。")
+			//alert("现在相机高度小于250M,如果继续放大,默认地图将不做缩放。")
 		}else if(height>3550 && cameraCurrentHeight ==0 ){
 			cameraCurrentHeight =1;
-			alert("现在相机高度大于3550M,如果继续缩小,默认地图将不做缩放。")
+			//alert("现在相机高度大于3550M,如果继续缩小,默认地图将不做缩放。")
 		}
 	}
 	
@@ -1963,5 +2200,34 @@ $("#cesiumContainer").hover(function(){
 	})
 
 })
+//加载czml
+/*Sandcastle.addToolbarButton('Vehicle', function() {
+    viewer.dataSources.add(Cesium.CzmlDataSource.load('Vehicle1.czml'));    
+});*/
+var showdata =1;
+function trail() {
+	
+	var manModel =Cesium.CzmlDataSource.load('Vehicle1.czml');
+	if(showdata===1){
+		viewer.dataSources.add(manModel);
+		showdata=2;
+	}else{
+		viewer.dataSources.removeAll();
+		showdata =1;
+	}
+	
+}
+/*function gotrail(){
+	var dataSource = new Cesium.CzmlDataSource();
+	var czmlPath = 'Vehicle1.czml';
+	dataSource.process(czmlPath).then(function() {
+        part.loaded = true;
+        updateStatusDisplay();
+        viewer.trackedEntity = vehicleEntity = dataSource.entities.getById('Vehicle');
 
-
+        // Follow the vehicle with the camera.
+        if (!viewer.trackedEntity) {
+            viewer.trackedEntity = vehicleEntity = dataSource.entities.getById('Vehicle');
+        }
+    });
+}*/

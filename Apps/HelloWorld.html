@@ -5,16 +5,19 @@
   <meta charset="utf-8">
   <!-- Tell IE to use the latest, best version. -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*">
   <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
   <title>Hello World!</title>
 	<!--
 	<script src="../Build/Cesium/Cesium.js"></script>
 	-->
-
+	<script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="../../../../common/js/conf.js"></script>
 	<script type="text/javascript" src="../Build/CesiumUnminified/Cesium.js"></script>
-	<script src="Sandcastle/Sandcastle-header.js"></script>
-  <script src="echarts.min.js"></script>
+	<script type="text/javascript" src="Sandcastle/Sandcastle-header.js"></script>
+	<script type="text/javascript" src="demojs.js"></script>
+  <script type="text/javascript" src="echarts.min.js"></script>
   
   <style>
       @import url(../Build/Cesium/Widgets/widgets.css);
@@ -108,11 +111,11 @@
 	}
 	.btns {
 		top: 7px;
-		width: 161px;
+		width: 212px;
 		height: 31px;
 		/* float: right; */
 		position: absolute;
-		right: 4px;
+		right: -7px;
 		/* background: #fff; */
 		z-index: 99;		
 		display: block;
@@ -140,6 +143,13 @@
 	.model-building {
 		background: url('moxing.png')
 	}
+	.transpatentB {
+		background: url('person.png')
+	}
+	.transpatentC {
+		background: url('focus.png')
+	}
+
 
   #toolbar{
 	  position: absolute;
@@ -152,10 +162,10 @@
     position: absolute;
     border-width: 1px;
     border-color: white;
-    height: 129px;
+    height: 80px;
     width: 30px;
     display: none;
-    right: 10px;
+    right: 50px;
     top: 33px;
     z-index: 1000;
     margin: 3px 0;
@@ -174,6 +184,90 @@
     margin: 10px 0;
     
   }
+  .cesium-infoBox{
+	  z-index: 10;
+	  height: 200px;
+	  display: none;
+	  position: absolute;
+	  top: 98px;
+	  right: 9px;
+	  width: 40%;
+	  max-width: 480px;
+	  background: rgba(38,38,38,0.95);
+	  color: #edffff;
+	  border: 1px solid #444;
+	  border-right: none;
+	  border-top-left-radius: 7px;
+	  border-bottom-left-radius: 7px;
+	  box-shadow: 0 0 10px 1px #000;
+  }
+  .cesium-infoBox-title {
+	  display: block;
+	  height: 20px;
+	  padding: 5px 30px 5px 25px;
+	  background: rgba(84,84,84,1.0);
+	  border-top-left-radius: 7px;
+	  text-align: center;
+	  text-overflow: ellipsis;
+	  white-space: nowrap;
+	  overflow: hidden;
+	  box-sizing: content-box;
+  }
+	  .cancel-btn {
+		  background: #333;
+		  width: 25px;
+		  position: absolute;
+		  top: 3px;
+		  right: 3px;
+		  z-index: 10;
+		  height: 25px;
+		  display: block;
+	  }
+	  .cancel-btn {
+		  background: url('cancel.png');
+		  background-size: cover;
+	  }
+	  .cesium-infoBox-defaultTable{
+	  height:100px;
+		width: 100%;
+		display: table;
+	    border-collapse: separate;
+	    border-spacing: 2px;
+	    border-color: grey;
+	    white-space: normal;
+	    line-height: normal;
+	    font-weight: normal;
+	    font-size: medium;
+	    font-style: normal;
+	    color: -internal-quirk-inherit;
+	    text-align: start;
+	    font-variant: normal;
+	    color: #edffff;
+}
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+.cesium-infoBox-defaultTable tr:nth-child(odd) {
+    background-color: rgba(84, 84, 84, 0.8);
+}
+.cesium-infoBox-defaultTable th {
+    font-weight: normal;
+    padding: 3px;
+    vertical-align: middle;
+    text-align: center;
+}
+.cesium-infoBox-defaultTable td {
+    padding: 3px;
+    vertical-align: middle;
+    text-align: left;
+}
   
   </style>
 </head>
@@ -186,14 +280,21 @@
 		  <div class="clear little-btn" onclick="model_clear()" ></div>
 		  <div class="model-building little-btn" onclick="showModel()"></div>
 		  <div class="draw-btn little-btn" id='draw-btn' onclick="showDrawBox()"></div>
-		  
+		  <div class="transpatentB little-btn" onclick="trail()" ></div><!-- getscreenpoint() trail()-->
+		  <!-- <div class="transpatentC little-btn" onclick="gotrail()" ></div> -->
 	  </div>
 	  <div class="box-draw-a" id='draw-btn-a' onclick="" >
-		  	<div class="box-draw box-point" onclick='drawPoint()' style="background: url('point.png')"></div>
+		  	<!-- <div class="box-draw box-point" onclick='drawPoint()' style="background: url('point.png')"></div> -->
 		  	<div class="box-draw box-polyline" onclick='drawPlyline()' style="background: url('polyline.png')"></div>
 		  	<div class="box-draw box-polygon"  onclick='drawPolygon()'style="background: url('polygon.png')"></div>
 		  	
-		  </div>
+	  </div>
+	  <div id="cesium-infoBox" class="cesium-infoBox cesium-infoBox-visible">
+	  <div class="cesium-infoBox-title" id='savebtn' >保存</div>
+	  <div class="cancel-btn"  onclick='closeInfoBox()' style="position: absolute;top:2px;right: 2px;z-index: 10;"></div>
+	  <div id='cancel-btn' class="cancel-btn" style="display:none;position: absolute;top:2px;right: 2px;z-index: 10;"  z-index=99></div>
+	  <iframe sandbox="allow-same-origin allow-popups allow-forms  allow-scripts" class="cesium-infoBox-iframe" id='innerhtml' allowfullscreen="true" src="content.html" style="max-height: 165px; height: 271px;"></iframe>
+	  </div>
 
 
 	  <!--
@@ -219,9 +320,10 @@
   </script>
 </body>
 <script src="interact.js"></script>
-<script type="text/javascript" src="../../../../library/jquery/jquery-2.1.0.min.js"></script>
-<script type="text/javascript" src="../../../view3/interact.js"></script>
+<script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="interact.js"></script>
 <script type="text/javascript" src="../../VitoGISFramework.js"></script>
 <script type="text/javascript" src="bigdata.js"></script>
+<script type="text/javascript" src="link.js"></script>
 </html>
 
